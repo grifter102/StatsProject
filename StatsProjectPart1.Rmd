@@ -26,26 +26,34 @@ lmb <- 0.2
 
 ### Theoretical Mean
 
-The theoretical mean of the exponential distribution is $\lambda^{-1}$.
+The theoretical mean of the exponential distribution is $\lambda^{-1}$ and the theoretical variance is $\lambda^{-2}$
 
 ```{r theoretical_mean}
 
-lmb^-1
+t.m <- lmb^-1
+t.v <- lmb^-2
+
+t.m
+t.v
 
 ```
 
 ### Sample plot
 
-If we plot a sample exponential distribution with 1000 variables we see the structure of the distribution. We can also calculate the sample's mean.
+If we plot a sample exponential distribution of n variables we see the structure of the distribution. We can also calculate the sample's mean and variance.
 
 ```{r sample_plot}
 
-hist(rexp(1000,lmb))
-mean(rexp(1000,lmb))
+sample <- rexp(n,lmb)
+
+hist(sample, main = "Sample Histogram")
+s.m <- mean(sample)
+s.v <- var(sample)
+
+s.m
+s.v
 
 ```
-
-The mean is close to the theoretical mean.
 
 ### Simulation
 
@@ -57,8 +65,35 @@ mns = NULL
 for (i in 1 : iterations) mns = c(mns, mean(rexp(n, lmb)))
 hist(mns)
 
-mean(mns)
+e.m <- mean(mns)
+e.v <- var(mns)
+
+e.m
+e.v
 
 ```
 
-The distribution of the means is normally distributed and the mean of the means is very close to the theoretical mean.
+### Comparisons
+
+We can now compare the theoretical mean and variance with the mean and variance of one sample versus the mean and variance of the experimental samples.
+
+__Theoretical:__  
+```{r t.comparisons}
+t.m
+t.v
+```
+
+__One Sample:__  
+```{r s.comparisons}
+s.m
+s.v
+```
+
+__Experiment:__  
+```{r e.comparisons}
+e.m
+e.v
+```
+
+We can see that the theoretical mean and the one sample mean and variance are very similar. The experimental mean is even closer to the theoretical mean while the variance of the experiment is far less, as the distribution of the experiment is normal.
+
