@@ -1,0 +1,103 @@
+---
+title: "Tooth Growth Analysis"
+author: "Michael Houck"
+date: "August 23, 2015"
+output: pdf_document
+---
+
+## Summary
+
+The ToothGrowth dataset contains the length of teeth in each of 10 guinea pigs at each of three dose levels of Vitamin C (0.5, 1, and 2 mg) with each of two delivery methods (orange juice or ascorbic acid). This analysis will look at those results and determine the statistical differences between the methods.
+
+## Data and Library Import
+
+We will import the ToothGrowth dataset as well as the ggplot2 library to display some exploratory graphs.
+
+```{r experiment_setup}
+
+library(ggplot2)
+library(datasets)
+data("ToothGrowth")
+
+```
+
+## Exploratory Analysis
+
+The ToothGrowth dataset contains the supplement type, the dosage and the resulting tooth growth amount. Here is an overall summary of the data.
+
+```{r exp_plot, fig.width=8}
+
+qplot(as.factor(dose), len, 
+      data = ToothGrowth, 
+      geom="boxplot", 
+      facets=~ supp, 
+      color = as.factor(dose)) + 
+  labs(x = "Dosage", y = "Length", color = "Dosage", 
+       title = "Tooth Growth by Supplement Type and Dosage")
+
+```
+
+A visual examination seems to show OJ .5mg and 1mg performing better than VC, but VC and OJ are very close for the 2mg dose.  
+
+## Statistical Analysis
+
+### Dose by Dose
+
+__.5 mg Dosage__  
+```{r half_mg}
+dose.m <- .5
+
+g1 <- ToothGrowth[ToothGrowth$supp == "OJ" & ToothGrowth$dose == dose.m,"len"]
+g2 <- ToothGrowth[ToothGrowth$supp == "VC" & ToothGrowth$dose == dose.m,"len"]
+
+t.test(g1,g2)
+
+```
+
+The 95% confidence interval being entirely positive shows that OJ's mean is greater than VC for dosage .5mg.
+
+__1 mg Dosage__  
+```{r one_mg}
+dose.m <- 1
+
+g1 <- ToothGrowth[ToothGrowth$supp == "OJ" & ToothGrowth$dose == dose.m,"len"]
+g2 <- ToothGrowth[ToothGrowth$supp == "VC" & ToothGrowth$dose == dose.m,"len"]
+
+t.test(g1,g2)
+
+```
+
+The 95% confidence interval being entirely positive shows that OJ's mean is greater than VC for dosage 1mg.
+
+__2 mg Dosage__  
+```{r two_mg}
+dose.m <- 2
+
+g1 <- ToothGrowth[ToothGrowth$supp == "OJ" & ToothGrowth$dose == dose.m,"len"]
+g2 <- ToothGrowth[ToothGrowth$supp == "VC" & ToothGrowth$dose == dose.m,"len"]
+
+t.test(g1,g2)
+
+```
+
+The 95% confidence interval spans 0, which shows that we cannot say that there is a significant difference in the means of OJ and VC for dosage 2mg.
+
+### Overall Supplement Comparison
+
+We can also compare the supplements overall across all dosages.
+
+```{r all_dosages}
+
+g1 <- ToothGrowth[ToothGrowth$supp == "OJ","len"]
+g2 <- ToothGrowth[ToothGrowth$supp == "VC","len"]
+
+t.test(g1,g2)
+
+```
+
+The 95% confidence interval is not entirely above 0, so we cannot say that the mean of OJ is always above that of VC.
+
+## Assumptions
+
+The statistical analysis did not assume paired samples as the description of the dataset did not mention if the samples were paired. We will also assume that the tooth growth amounts are normally distributed. We know the sample sizes were equal in all tests. We will also assume that the trials were performed independently from one another, so none of the samples were dependent.
+
