@@ -1,0 +1,64 @@
+---
+title: "Central Limit Theorem"
+author: "Michael Houck"
+date: "August 23, 2015"
+output: pdf_document
+---
+
+## Summary
+
+The Central Limit Theorem states that, under certain cirsumstances, taking a sufficient number of sample means from a random variable is itself a random variable which will be normally distributed around the original population mean. This analysis will show this theory in pracice via simulation using the exponential distribution.
+
+## Experiment
+
+### Set-up
+
+First, we will set up the experiment variables: the random number seed, the number of draws, the number of simulation iterations and lambda.
+
+```{r experiment_setup}
+
+set.seed(1234)
+n <- 40
+iterations <- 1000
+lmb <- 0.2
+
+```
+
+### Theoretical Mean
+
+The theoretical mean of the exponential distribution is $\lambda^{-1}$.
+
+```{r theoretical_mean}
+
+lmb^-1
+
+```
+
+### Sample plot
+
+If we plot a sample exponential distribution with 1000 variables we see the structure of the distribution. We can also calculate the sample's mean.
+
+```{r sample_plot}
+
+hist(rexp(1000,lmb))
+mean(rexp(1000,lmb))
+
+```
+
+The mean is close to the theoretical mean.
+
+### Simulation
+
+When we run the simulation, we see the following:
+
+```{r simulation}
+
+mns = NULL
+for (i in 1 : iterations) mns = c(mns, mean(rexp(n, lmb)))
+hist(mns)
+
+mean(mns)
+
+```
+
+The distribution of the means is normally distributed and the mean of the means is very close to the theoretical mean.
